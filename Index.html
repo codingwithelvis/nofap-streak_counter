@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NoFap Streak Tracker 💪</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #0f172a;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2em;
+      color: #38bdf8;
+    }
+    input, button {
+      margin: 1rem;
+      padding: 0.7rem 1.2rem;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+    }
+    input {
+      background-color: #1e293b;
+      color: white;
+      border: 1px solid #475569;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+    .streak {
+      font-size: 3em;
+      margin-top: 1.5rem;
+      color: #22c55e;
+    }
+    .quote {
+      font-style: italic;
+      margin-top: 2rem;
+      color: #facc15;
+    }
+  </style>
+</head>
+<body>
+  <h1>NoFap Streak Tracker</h1>
+  <input type="date" id="startDate" />
+  <div>
+    <button onclick="startTracking()">Start</button>
+    <button onclick="resetStreak()">I Relapsed 😔</button>
+  </div>
+  <div class="streak" id="streakDisplay">🔥 0 Days</div>
+  <div class="quote" id="quoteDisplay">"You're stronger than your urges."</div>
+
+  <script>
+    const quoteList = [
+      "Resetting doesn’t mean failure — it means you’re still fighting.",
+      "Discipline is choosing what you want most over what you want now.",
+      "You're stronger than your urges.",
+      "Each day you win, your future gets brighter.",
+      "The battle is tough, but so are you.",
+      "Greatness is built one day at a time."
+    ];
+
+    function getRandomQuote() {
+      return quoteList[Math.floor(Math.random() * quoteList.length)];
+    }
+
+    function startTracking() {
+      const date = document.getElementById("startDate").value;
+      if (!date) {
+        alert("Please select a start date.");
+        return;
+      }
+      localStorage.setItem("nofap_start", date);
+      updateStreak();
+    }
+
+    function resetStreak() {
+      localStorage.removeItem("nofap_start");
+      document.getElementById("streakDisplay").innerHTML = "🔥 0 Days";
+      document.getElementById("quoteDisplay").innerText = getRandomQuote();
+    }
+
+    function updateStreak() {
+      const start = localStorage.getItem("nofap_start");
+      if (start) {
+        const startDate = new Date(start);
+        const today = new Date();
+        const diffTime = today - startDate;
+        const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById("streakDisplay").innerHTML = `🔥 ${days} Day${days !== 1 ? 's' : ''}`;
+        document.getElementById("quoteDisplay").innerText = getRandomQuote();
+        document.getElementById("startDate").value = start;
+      }
+    }
+
+    // Run on load
+    window.onload = updateStreak;
+  </script>
+</body>
+</html>
